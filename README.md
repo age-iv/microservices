@@ -1,4 +1,3 @@
-```markdown
 # News Microservices
 
 Микросервисная система агрегатора новостей с комментариями и цензурой.
@@ -22,7 +21,7 @@
 
 ```bash
 # 1. Клонируйте репозиторий
-git clone <repo-url> && cd news-microservices
+git clone (https://github.com/age-iv/microservices/) && cd microservices
 
 # 2. Соберите и запустите все сервисы
 docker-compose up --build
