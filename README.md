@@ -21,7 +21,7 @@
 
 ```bash
 # 1. Клонируйте репозиторий
-git clone (https://github.com/age-iv/microservices/) && cd microservices
+git clone https://github.com/age-iv/microservices/ && cd microservices
 
 # 2. Соберите и запустите все сервисы
 docker-compose up --build
