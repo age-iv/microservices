@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+
+  news-service:
+    build: ./news-service
+    ports:
+      - "8081:8081"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: newsdb
+      SERVER_PORT: 8081
+    depends_on:
+      - postgres
+
+  comments-service:
+    build: ./comments-service
+    ports:
+      - "8082:8082"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: commentsdb
+      SERVER_PORT: 8082
+    depends_on:
+      - postgres
+
+  censorship-service:
+    build: ./censorship-service
+    ports:
+      - "8083:8083"
+    environment:
+      SERVER_PORT: 8083
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      NEWS_SERVICE_URL: http://news-service:8081
+      COMMENTS_SERVICE_URL: http://comments-service:8082
+      CENSORSHIP_SERVICE_URL: http://censorship-service:8083
+      SERVER_PORT: 8080
+    depends_on:
+      - news-service
+      - comments-service
+      - censorship-service
+
+volumes:
+  pgdata:
